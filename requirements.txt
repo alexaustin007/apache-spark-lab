@@ -1,0 +1,10 @@
+# PySpark - the main library for Spark in Python
+pyspark==3.5.0
+
+# Optional but helpful for data analysis and debugging
+pandas==2.1.4  # helps convert Spark DataFrames to Pandas for quick inspection
+numpy==1.26.2  # often needed for numerical operations
+
+# For Jupyter notebook support (optional - only if you want to use notebooks)
+# jupyter==1.0.0
+# notebook==7.0.6
