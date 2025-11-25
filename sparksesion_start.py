@@ -11,7 +11,7 @@ df = spark.read.csv('routes_enriched.csv', header=True, inferSchema=True)
 
 df.show(5)
 
-df.printSchema()
+# df.printSchema()
 print(df.count())
 
 
@@ -37,6 +37,11 @@ df_ranked = df.withColumn("rank", F.row_number().over(window_spec) )
 # df_ranked.show(5)
 
 df_ranked.select("airline_name", "origin_city", "destination_city", "distance_km", "rank").filter((df_ranked.rank <= 3) & (df_ranked.airline_name.isin(['Ryanair','American Airlines','United Airlines']))).show()
+
+print("Spark UI is running at: http://localhost:4040")
+print("Press Ctrl+C to stop...")
+input("Press Enter to stop Spark...")  #keeping spark UI runing
+
 
 spark.stop()
 
