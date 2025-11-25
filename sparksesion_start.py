@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
+from pyspark.sql.window import Window
 
 spark = SparkSession.builder.appName("sparkMastery").getOrCreate()
 
@@ -29,6 +30,13 @@ multiple_agg.show()
 contains_new = df.filter(df.origin_city.like("%New%")).groupBy("origin_city").count().orderBy("count", ascending=False)
 
 contains_new.show()
+
+window_spec = Window.partitionBy("airline_name").orderBy(F.desc("distance_km"))
+
+df_ranked = df.withColumn("rank", F.row_number().over(window_spec) )
+# df_ranked.show(5)
+
+df_ranked.select("airline_name", "origin_city", "destination_city", "distance_km", "rank").filter((df_ranked.rank <= 3) & (df_ranked.airline_name.isin(['Ryanair','American Airlines','United Airlines']))).show()
 
 spark.stop()
 
