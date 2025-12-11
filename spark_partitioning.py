@@ -8,4 +8,9 @@ df = spark.read.csv("routes_enriched.csv", inferSchema = True, header = True)
 # print(df.count())
 print(df.rdd.getNumPartitions())
 print(f"Total rows: {df.count()}")
+repartitioned_df = df.repartition(20)
+print(f"Partitions after repartition(20): {repartitioned_df.rdd.getNumPartitions()}")
+
+  # Trigger action and check UI
+repartitioned_df.count()
 input("Press Enter to stop...")
