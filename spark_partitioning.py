@@ -29,8 +29,17 @@ df_year.write.mode("overwrite").partitionBy("year").parquet("orders_partitioned/
 # df_year_r = spark.read.parquet("orders_partitioned/")
 # df_year_r.show(5)
 df_filtered = spark.read.parquet("orders_partitioned/").filter(col("year") == 2024)
-df_filtered.count()  s
+# df_filtered.count()  # Triggers the job
 
 df_no_pruning = spark.read.parquet("orders_partitioned/").filter(col("customer_id") == 1)
-df_no_pruning.count()
+# df_no_pruning.count()
+
+orders_df = spark.read.csv('orders.csv', header=True, inferSchema=True)
+# orders_df.show(5)
+
+customers_df = spark.read.csv('customers.csv', header=True, inferSchema=True)
+# customers_df.show(5)
+# spark.conf.set("spark.sql.autoBroadcastJoinThreshold", "-1")
+joined_df_forced_broadcast = orders_df.join(customers_df, "customer_id", "inner")
+joined_df_forced_broadcast.count()
 input("Press Enter to stop...")
